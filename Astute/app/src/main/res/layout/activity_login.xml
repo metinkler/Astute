@@ -31,23 +31,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="logo"
+                android:src="@drawable/astutelogo"
+                android:id="@+id/imageView" />
+
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/view">
-
-                <AutoCompleteTextView
-                    android:id="@+id/email"
-                    android:paddingTop="200dp"
-                    android:background="#FFFFFF"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="80dp"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -62,26 +57,27 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="350dp"
-                android:layout_marginStart="20dp"
                 android:text="Sign in"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_below="@+id/password"
+                android:layout_toStartOf="@+id/editText"
+                android:layout_marginTop="32dp" />
 
             <Button
                 android:id="@+id/email_register_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="350dp"
                 android:layout_marginLeft="180dp"
                 android:text="Register"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignTop="@+id/email_sign_in_button"
+                android:layout_alignParentEnd="true" />
 
             <EditText
                 android:id="@+id/password"
                 android:background="#ffffff"
                 android:layout_width="200dp"
-                android:layout_marginStart="80dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/login"
@@ -90,8 +86,29 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/view"
-                android:layout_alignParentStart="true" />
+                android:layout_below="@+id/imageView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="41dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText"
+                android:layout_alignBottom="@+id/password"
+                android:layout_centerHorizontal="true" />
+
+            <AutoCompleteTextView
+                android:id="@+id/email"
+                android:background="#FFFFFF"
+                android:layout_marginLeft="80dp"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:layout_below="@+id/imageView"
+                android:layout_alignEnd="@+id/password" />
 
 
         </RelativeLayout>
