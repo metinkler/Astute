@@ -13,6 +13,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.text.TextWatcher;
 import android.content.Intent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 // going to be the newsfeed page
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +26,31 @@ public class MainActivity extends AppCompatActivity {
     // Search EditText
     EditText inputSearch;
 
-    ArrayAdapter<String> adapter;
+    //ArrayAdapter<String> adapter;
+
+    CustomListAdapter adapter;
+
+    Integer[] imgid={
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher
+    };
+
+    Integer[] members = {
+            1,
+            3,
+            4,
+            2,
+            8,
+            1,
+            5,
+            2
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +63,19 @@ public class MainActivity extends AppCompatActivity {
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
         // Defined Array values to show in ListView
-        String[] values = new String[] { "CS 420 - Human-Computer Interaction",
-                "CS 241 - Date Structures",
-                "ENGL 212 - Intro to Creative Writing",
-                "KINES 110 - Ballroom Dance 01",
-                "MATH 211 - Calculus II",
-                "ENGL 310 - Epic & Romance",
-                "PSYCH 201 - Psych as a Social Science",
-                "HIST 320 - History of Modern Japan"
-        };
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("CS 420 - Human-Computer Interaction");
+        values.add("CS 241 - Data Structures");
+        values.add("ENGL 212 - Intro to Creative Writing");
+        values.add("KINES 110 - Ballroom Dance 01");
+        values.add("MATH 211 - Calculus II");
+        values.add("ENGL 310 - Epic & Romance");
+        values.add("PSYCH 201 - Psych as a Social Science");
+        values.add("HIST 320 - History of Modern Japan");
+
 
         // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
-
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        this.adapter = new CustomListAdapter(this, values, imgid, members);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
@@ -68,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 int itemPosition   = position;
 
                 // ListView Clicked item value
-                String  itemValue    = (String) listView.getItemAtPosition(position);
+                String  itemValue    = listView.getItemAtPosition(position).toString();
 
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
@@ -84,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
+                System.out.println(MainActivity.this.adapter);
                 MainActivity.this.adapter.getFilter().filter(cs);
             }
 
