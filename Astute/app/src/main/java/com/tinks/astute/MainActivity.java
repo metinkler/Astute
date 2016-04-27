@@ -12,14 +12,15 @@ import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.text.TextWatcher;
 import android.content.Intent;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import android.support.v4.widget.DrawerLayout;
 
 // going to be the newsfeed page
 
 public class MainActivity extends AppCompatActivity {
+    private String[] mPlanetTitles;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
     ListView listView;
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
@@ -61,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
+
+        //Start navigation drawer
+        mPlanetTitles = getResources().getStringArray(R.array.classes_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //End navigation drawer
 
         // Defined Array values to show in ListView
         ArrayList<String> values = new ArrayList<String>();
@@ -126,6 +138,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            // Highlight the selected item, update the title, and close the drawer
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            setTitle("......");
+
+            String text= "menu click... should be implemented";
+            Toast.makeText(MainActivity.this, text , Toast.LENGTH_LONG).show();
+            //mDrawer.closeDrawer(mDrawerList);
+
+
+        }
+    }
 }
 
 
