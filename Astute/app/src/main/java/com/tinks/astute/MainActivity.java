@@ -1,6 +1,8 @@
 package com.tinks.astute;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.widget.ArrayAdapter;
@@ -14,13 +16,25 @@ import android.text.TextWatcher;
 import android.content.Intent;
 import java.util.ArrayList;
 import android.support.v4.widget.DrawerLayout;
-
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.content.res.Configuration;
 // going to be the newsfeed page
 
-public class MainActivity extends AppCompatActivity {
-    private String[] mPlanetTitles;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    NavigationView mDrawer;
+    ActionBarDrawerToggle drawerToggle;
+    int mSelectedId;
+    Toolbar toolbar;
+    int newId=0;
+
+    String[] added = new String[20];
+    int current = 0;
 
     ListView listView;
 
@@ -57,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setToolbar();
+        initView();
         Intent intent = getIntent();
 
         // Get ListView object from xml
@@ -64,14 +80,11 @@ public class MainActivity extends AppCompatActivity {
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
         //Start navigation drawer
-        mPlanetTitles = getResources().getStringArray(R.array.classes_array);
+        drawerToggle=new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
+        mDrawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         //End navigation drawer
 
         // Defined Array values to show in ListView
@@ -138,20 +151,87 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            // Highlight the selected item, update the title, and close the drawer
-            // update selected item and title, then close the drawer
-            mDrawerList.setItemChecked(position, true);
-            setTitle("......");
-
-            String text= "menu click... should be implemented";
-            Toast.makeText(MainActivity.this, text , Toast.LENGTH_LONG).show();
-            //mDrawer.closeDrawer(mDrawerList);
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Intent intent = getIntent();
+        //Gets information from the class scroller
+        String value = data.getStringExtra("class");
+        Log.v("app", "value " + value);
+        newId++;
+        if(value != null && !value.isEmpty()){
+            int length = added.length;
+            int found = 0;
+            for(int i=0; i<length; i++){
+                if(value.equals(added[i])){
+                    found = 1;
+                }
+            }
+            if (found==1){
+                String toastText= "Error: Class is already added!";
+                Toast.makeText(MainActivity.this, toastText , Toast.LENGTH_LONG).show();
+            }
+            else{
+                MenuItem newMenuItem = mDrawer.getMenu().add(R.id.group1, newId, 3, value);
+                newMenuItem.setCheckable(true);
+                added[current] = value;
+                current++;
+            }
         }
+
+    }
+
+
+    private void setToolbar() {
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+    }
+
+    private void initView() {
+        mDrawer= (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer.setNavigationItemSelectedListener(this);
+        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+    private void itemSelection(int mSelectedId) {
+
+        switch(mSelectedId){
+
+            case R.id.add_class:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent i = new Intent(getBaseContext(), ClassScrollActivity.class);
+                startActivityForResult(i, 123);
+                break;
+
+            default:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                break;
+        }
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+        menuItem.setChecked(true);
+        mSelectedId=menuItem.getItemId();
+        itemSelection(mSelectedId);
+        Log.v("app", String.valueOf(mSelectedId));
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        //save selected item so it will remains same even after orientation change
+        outState.putInt("SELECTED_ID",mSelectedId);
     }
 }
 

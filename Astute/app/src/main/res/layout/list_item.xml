@@ -31,6 +31,6 @@
             android:text="TextView"
             android:layout_marginLeft="300dp"/>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
