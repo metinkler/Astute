@@ -5,24 +5,27 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.widget.ArrayAdapter;
+
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.text.TextWatcher;
 import android.content.Intent;
 import java.util.ArrayList;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
+
 import android.os.PersistableBundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.content.res.Configuration;
+import android.widget.Button;
 // going to be the newsfeed page
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int current = 0;
 
     ListView listView;
+    Button nav;
 
     // Search EditText
     EditText inputSearch;
@@ -67,6 +71,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             2
     };
 
+    Integer[] times = {
+            5,
+            15,
+            23,
+            30,
+            32,
+            45,
+            50,
+            60,
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
+        nav = (Button) findViewById(R.id.nav);
 
         //Start navigation drawer
         drawerToggle=new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
@@ -89,18 +105,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Defined Array values to show in ListView
         ArrayList<String> values = new ArrayList<String>();
-        values.add("CS 420 - Human-Computer Interaction");
-        values.add("CS 241 - Data Structures");
-        values.add("ENGL 212 - Intro to Creative Writing");
-        values.add("KINES 110 - Ballroom Dance 01");
-        values.add("MATH 211 - Calculus II");
-        values.add("ENGL 310 - Epic & Romance");
-        values.add("PSYCH 201 - Psych as a Social Science");
-        values.add("HIST 320 - History of Modern Japan");
+        values.add("CS 420\nSwem 140");
+        values.add("CS 241\nJones 214");
+        values.add("ENGL 212\nSwem Read & Relax");
+        values.add("KINES 110\nBlow 333");
+        values.add("MATH 211\nBlair 220");
+        values.add("ENGL 310\nSwem 163");
+        values.add("PSYCH 201\nSwem 264");
+        values.add("HIST 320\nBlow 331");
 
 
         // Define a new Adapter
-        this.adapter = new CustomListAdapter(this, values, imgid, members);
+        this.adapter = new CustomListAdapter(this, values, imgid, members, times);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
@@ -125,6 +141,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
 
+        });
+
+        nav.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Toast.makeText(getApplicationContext(),"dope",Toast.LENGTH_LONG).show();
+            }
         });
 
         inputSearch.addTextChangedListener(new TextWatcher() {

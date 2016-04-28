@@ -24,13 +24,14 @@ public class CustomListAdapter extends BaseAdapter implements Filterable {
     private final ArrayList<String> itemname;
     private final Integer[] imgid;
     private final Integer[] members;
+    private final Integer[] times;
 
     ArrayList<String> objects = new ArrayList<String>();
     ArrayList<String> filteredList = new ArrayList<String>();
 
     String item = new String();
 
-    public CustomListAdapter(Activity context, ArrayList<String> itemname, Integer[] imgid, Integer[] members) {
+    public CustomListAdapter(Activity context, ArrayList<String> itemname, Integer[] imgid, Integer[] members, Integer[] times) {
         //super(context, R.layout.list_item, itemname);
         // TODO Auto-generated constructor stub
 
@@ -38,6 +39,7 @@ public class CustomListAdapter extends BaseAdapter implements Filterable {
         this.itemname=itemname;
         this.imgid=imgid;
         this.members=members;
+        this.times=times;
 
         for (int k = 0; k < itemname.size(); k++) {
             System.out.println("Item: " + k + "Text: " + itemname.get(k));
@@ -54,13 +56,15 @@ public class CustomListAdapter extends BaseAdapter implements Filterable {
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
         TextView extratxt = (TextView) rowView.findViewById(R.id.textView1);
+        TextView time = (TextView) rowView.findViewById(R.id.time);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         txtTitle.setText(filteredList.get(position));
         imageView.setImageResource(imgid[position]);
 
 
-        extratxt.setText(Integer.toString(members[position]) + "  members");
+        extratxt.setText(Integer.toString(members[position]));
+        time.setText(Integer.toString(times[position])+ " m");
 
         return rowView;
 
